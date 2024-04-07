@@ -83,7 +83,7 @@ export class AppComponent {
     initialValue: this.form.status,
   });
 
-  //   Note #1 - the shape of the old and new value are different - the events value one is flattened
+  // Note #1 - edit - no, it's not flattened, it is the last contained control's event
   valuesChanging$ = combineLatest([
     this.form.valueChanges,
     this.form.events.pipe(map((event) => event.source.getRawValue())),
