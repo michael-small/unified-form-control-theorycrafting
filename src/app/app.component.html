@@ -25,14 +25,27 @@
     <label for="name">Name </label>
     <input [formControl]="form.controls.name" name="name" type="text" />
 
+    <label for="inner-name">Inner Name </label>
+    <input
+      [formControl]="form.controls.innerForm.controls.innerName"
+      name="inner-name"
+      type="text"
+    />
+
     <label for="age">Age </label>
     <input [formControl]="form.controls.age" name="age" type="number" />
   </form>
 </section>
-
+<pre>{{ $valueEvents() }}</pre>
+<pre>{{ valueEvents$ | async }}</pre>
 <div>
   <h2>(in logs) Events and Events Sources</h2>
   <pre>{{ eventsAndEventsSource$ | async }}</pre>
+</div>
+
+<div>
+  <h2>mapping values of 4 types from source</h2>
+  <pre>{{ mappingEventsFromSource$ | async }}</pre>
 </div>
 
 <div>

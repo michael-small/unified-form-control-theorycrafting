@@ -7,7 +7,10 @@ import {
   FormControlStatus,
   FormGroup,
   NonNullableFormBuilder,
+  PristineEvent,
   ReactiveFormsModule,
+  StatusEvent,
+  TouchedEvent,
   Validators,
   ValueChangeEvent,
 } from '@angular/forms';
@@ -32,6 +35,9 @@ export class AppComponent {
   initialValues = {
     name: '',
     age: 0,
+    innerForm: {
+      innerName: '',
+    },
   };
 
   fb = inject(NonNullableFormBuilder);
@@ -41,6 +47,9 @@ export class AppComponent {
       validators: Validators.required,
     }),
     age: this.fb.control(this.initialValues.age),
+    innerForm: this.fb.group({
+      innerName: this.fb.control(this.initialValues.innerForm.innerName),
+    }),
   });
 
   formValues<T>(form: AbstractControl<T>): Observable<T> {
@@ -126,9 +135,89 @@ export class AppComponent {
     this.form.events.pipe(map((event) => event.source)),
   ]).pipe(
     tap(([events, eventsSources]) => {
-      console.log(events);
-      console.log(eventsSources);
-      console.log('----------------');
+      //   console.log(events);
+      //   console.log(eventsSources);
+      //   console.log('----------------');
     })
   );
+
+  mappingEventsFromSource$ = this.form.events.pipe(
+    map((events) => {
+      return {
+        value: events.source.value,
+        status: events.source.status,
+        touched: events.source.touched,
+        prisine: events.source.pristine,
+      };
+    })
+    // tap((val) => console.log(val))
+  );
+
+  // mappingEvents$ = this.form.events.pipe(
+  //   map((events) => {
+  //     return {
+  //       value: events.value
+  //       status: events.source.status,
+  //       touched: events.source.touched,
+  //       prisine: events.source.pristine,
+  //     };
+  //   }),
+  //   tap((val) => console.log(val))
+  // );
+
+  valueEvents$ = this.form.events.pipe(
+    filter(
+      (
+        event: ControlEvent
+      ): event is ValueChangeEvent<typeof this.form.value> =>
+        event instanceof ValueChangeEvent
+    ),
+    tap((events) => {
+      //   console.log(events);
+    })
+  );
+  $valueEvents = toSignal(this.valueEvents$);
+  $eventsEffect = effect(() => {
+    const events = this.$valueEvents();
+    console.log(events);
+  });
+
+  statusEvents$ = this.form.events.pipe(
+    filter(
+      (event: ControlEvent): event is StatusEvent =>
+        event instanceof StatusEvent
+    ),
+    tap((events) => {
+      //   console.log(events);
+    })
+  );
+  $statusEvents = toSignal(this.statusEvents$);
+  $statusEffect = effect(() => {
+    const events = this.$statusEvents();
+    console.log(events);
+  });
+
+  touchedEvents$ = this.form.events.pipe(
+    filter(
+      (event: ControlEvent): event is TouchedEvent =>
+        event instanceof TouchedEvent
+    )
+  );
+  touchedEvents = toSignal(this.touchedEvents$);
+  $touchedEffect = effect(() => {
+    const events = this.touchedEvents();
+    console.log(events);
+  });
+
+  pristineEvents$ = this.form.events.pipe(
+    filter(
+      (event: ControlEvent): event is PristineEvent =>
+        event instanceof PristineEvent
+    )
+  );
+  $prisineEvents = toSignal(this.pristineEvents$);
+  $pristineEffect = effect(() => {
+    const events = this.$prisineEvents();
+    console.log(events);
+  });
 }
