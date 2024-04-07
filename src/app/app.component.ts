@@ -171,30 +171,22 @@ export class AppComponent {
         event: ControlEvent
       ): event is ValueChangeEvent<typeof this.form.value> =>
         event instanceof ValueChangeEvent
-    ),
-    tap((events) => {
-      //   console.log(events);
-    })
+    )
   );
   $valueEvents = toSignal(this.valueEvents$);
   $eventsEffect = effect(() => {
     const events = this.$valueEvents();
-    console.log(events);
   });
 
   statusEvents$ = this.form.events.pipe(
     filter(
       (event: ControlEvent): event is StatusEvent =>
         event instanceof StatusEvent
-    ),
-    tap((events) => {
-      //   console.log(events);
-    })
+    )
   );
   $statusEvents = toSignal(this.statusEvents$);
   $statusEffect = effect(() => {
     const events = this.$statusEvents();
-    console.log(events);
   });
 
   touchedEvents$ = this.form.events.pipe(
@@ -203,10 +195,9 @@ export class AppComponent {
         event instanceof TouchedEvent
     )
   );
-  touchedEvents = toSignal(this.touchedEvents$);
+  $touchedEvents = toSignal(this.touchedEvents$);
   $touchedEffect = effect(() => {
-    const events = this.touchedEvents();
-    console.log(events);
+    const events = this.$touchedEvents();
   });
 
   pristineEvents$ = this.form.events.pipe(
@@ -218,6 +209,18 @@ export class AppComponent {
   $prisineEvents = toSignal(this.pristineEvents$);
   $pristineEffect = effect(() => {
     const events = this.$prisineEvents();
-    console.log(events);
+  });
+
+  $allEventEffects = effect(() => {
+    const value = this.$valueEvents();
+    const status = this.$statusEvents();
+    const pristine = this.$prisineEvents();
+    const touched = this.$touchedEvents();
+
+    console.log(value);
+    console.log(status);
+    console.log(pristine);
+    console.log(touched);
+    console.log('----------------------');
   });
 }
