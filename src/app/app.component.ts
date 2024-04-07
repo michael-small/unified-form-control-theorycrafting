@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {
   AbstractControl,
+  ControlEvent,
   FormControlStatus,
   FormGroup,
   NonNullableFormBuilder,
@@ -88,8 +89,20 @@ export class AppComponent {
     this.form.valueChanges,
     this.form.events.pipe(map((event) => event.source.getRawValue())),
   ]).pipe(
-    tap(([valChanges, eventsVal]) =>
-      console.log('valueChanges', valChanges, 'eventsValue', eventsVal)
-    )
+    tap(([valChanges, eventsVal]) => {
+      //   console.log('valueChanges', valChanges, 'eventsValue', eventsVal);
+    })
   );
+
+  formEvent<T>(form: AbstractControl<T>): Observable<ControlEvent<T>> {
+    return form.events;
+  }
+  $formEvent = toSignal(this.formEvent(this.form));
+  formEvent$ = this.formEvent(this.form).pipe(
+    tap((event) => console.log(event))
+  );
+
+  //   formEventComposite<T>(form: AbstractControl<T>) {
+  //     const value = form.events.pipe(map((event) => event.source.getRawValue()));
+  //   }
 }

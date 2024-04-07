@@ -86,3 +86,14 @@
     whole form's value itself
   </p>
 </div>
+
+<div>
+  <h2>Actual form event obj (move somemwhere else)</h2>
+  <p>
+    Note - hmm, logging the raw event into the console reveals I am not getting
+    half the good stuff out of this by just going to the
+    <code>.source</code> property lol. Tapping to log for the moment being -
+    this object cannot be <code>| json</code> piped as is.
+  </p>
+  <pre>{{ formEvent$ | async }}</pre>
+</div>
