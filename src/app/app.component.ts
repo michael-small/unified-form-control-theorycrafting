@@ -101,7 +101,7 @@ export class AppComponent {
   $formEvent = toSignal(this.formEvent(this.form));
   formEvent$ = this.formEvent(this.form).pipe(
     tap((event) => {
-      // console.log(event)
+      //   console.log(event);
     })
   );
 
@@ -111,7 +111,7 @@ export class AppComponent {
         (event): event is ValueChangeEvent<T> =>
           event instanceof ValueChangeEvent
       ),
-      tap((event) => console.log(event.value)),
+      //   tap((event) => console.log(event.value)),
       map((event) => event.value)
     );
   }
@@ -120,4 +120,15 @@ export class AppComponent {
   //   formEventComposite<T>(form: AbstractControl<T>) {
   //     const value = form.events.pipe(map((event) => event.source.getRawValue()));
   //   }
+
+  eventsAndEventsSource$ = combineLatest([
+    this.form.events,
+    this.form.events.pipe(map((event) => event.source)),
+  ]).pipe(
+    tap(([events, eventsSources]) => {
+      console.log(events);
+      console.log(eventsSources);
+      console.log('----------------');
+    })
+  );
 }
