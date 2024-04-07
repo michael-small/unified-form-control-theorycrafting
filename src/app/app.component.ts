@@ -9,8 +9,9 @@ import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
+  ValueChangeEvent,
 } from '@angular/forms';
-import { Observable, combineLatest, map, tap } from 'rxjs';
+import { Observable, combineLatest, filter, map, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormStateComponent } from './form-state/form-state.component';
 @Component({
@@ -99,8 +100,21 @@ export class AppComponent {
   }
   $formEvent = toSignal(this.formEvent(this.form));
   formEvent$ = this.formEvent(this.form).pipe(
-    tap((event) => console.log(event))
+    tap((event) => {
+      // console.log(event)
+    })
   );
+
+  formValueEventOfParentIdk<T>(form: AbstractControl<T>) {
+    return form.events.pipe(
+      filter(
+        (event): event is ValueChangeEvent<T> =>
+          event instanceof ValueChangeEvent
+      ),
+      tap((event) => console.log(event.value))
+    );
+  }
+  formValueEventOfParentIdk$ = this.formValueEventOfParentIdk(this.form);
 
   //   formEventComposite<T>(form: AbstractControl<T>) {
   //     const value = form.events.pipe(map((event) => event.source.getRawValue()));
