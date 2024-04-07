@@ -15,3 +15,12 @@
   subclass. It allows to track value, pristine, touched and status changes on a
   given control.
 </blockquote>
+
+<hr />
+
+<form [formGroup]="form">
+  <label for="name">Name </label>
+  <input [formControl]="form.controls.name" name="name" />
+</form>
+
+<pre>{{ $formValues() | json }}</pre>
