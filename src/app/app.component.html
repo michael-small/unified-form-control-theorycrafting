@@ -23,7 +23,10 @@
 <section id="form">
   <form [formGroup]="form">
     <label for="name">Name </label>
-    <input [formControl]="form.controls.name" name="name" />
+    <input [formControl]="form.controls.name" name="name" type="text" />
+
+    <label for="age">Age </label>
+    <input [formControl]="form.controls.age" name="age" type="number" />
   </form>
 </section>
 
@@ -77,4 +80,9 @@
   </p>
   <p>(also logged to console)</p>
   <pre>{{ valuesChanging$ | async | json }}</pre>
+
+  <p>
+    What to note? The value event is on the latest form control value, not the
+    whole form's value itself
+  </p>
 </div>

@@ -29,6 +29,7 @@ export class AppComponent {
 
   initialValues = {
     name: '',
+    age: 0,
   };
 
   fb = inject(NonNullableFormBuilder);
@@ -37,6 +38,7 @@ export class AppComponent {
     name: this.fb.control(this.initialValues.name, {
       validators: Validators.required,
     }),
+    age: this.fb.control(this.initialValues.age),
   });
 
   formValues<T>(form: AbstractControl<T>): Observable<T> {
@@ -87,7 +89,7 @@ export class AppComponent {
     this.form.events.pipe(map((event) => event.source.getRawValue())),
   ]).pipe(
     tap(([valChanges, eventsVal]) =>
-      console.log('valChanges', valChanges, 'eventsVals', eventsVal)
+      console.log('valueChanges', valChanges, 'eventsValue', eventsVal)
     )
   );
 }
