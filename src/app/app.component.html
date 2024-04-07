@@ -30,6 +30,17 @@
   </form>
 </section>
 
+<div>
+  <h2>Filtering to get value changes events</h2>
+  <pre>{{ formValueEventOfParentIdk$ | async | json }}</pre>
+  <p>
+    Note - ok, yes, you have to filter out for event type, such as value, and
+    get the <code>.value</code> from that, and not the <code>.source</code>. I
+    guess reading the JSDoc and trusting the warning that
+    <code>.source</code> was deprecated isn't just for posers.
+  </p>
+</div>
+
 <h2>Old Fashioned change observables</h2>
 <div style="display: flex; gap: 1rem">
   <app-form-state
@@ -96,9 +107,4 @@
     this object cannot be <code>| json</code> piped as is.
   </p>
   <pre>{{ formEvent$ | async }}</pre>
-</div>
-
-<div>
-  <h2>Filtering to get value changes events</h2>
-  <pre>{{ formValueEventOfParentIdk$ | async }}</pre>
 </div>

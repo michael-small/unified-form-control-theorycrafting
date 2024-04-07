@@ -111,7 +111,8 @@ export class AppComponent {
         (event): event is ValueChangeEvent<T> =>
           event instanceof ValueChangeEvent
       ),
-      tap((event) => console.log(event.value))
+      tap((event) => console.log(event.value)),
+      map((event) => event.value)
     );
   }
   formValueEventOfParentIdk$ = this.formValueEventOfParentIdk(this.form);
