@@ -29,34 +29,52 @@
 
 <h2>Old Fashioned change observables</h2>
 <div style="display: flex; gap: 1rem">
-  <section id="basic-value-changes">
-    <p>Basic <code>.valueChanges()</code></p>
-    <pre>{{ $formValues() | json }}</pre>
-  </section>
-
-  <section id="basic-status-changes">
-    <p>Basic <code>.statusChanges()</code></p>
-    <pre>{{ $formStatus() | json }}</pre>
-  </section>
+  <app-form-state
+    codeDescription=".valueChanges()"
+    [reactiveFormState]="$formValues()"
+    [regularFormState]="form.value"
+  />
+  <app-form-state
+    codeDescription=".statusChanges()"
+    [reactiveFormState]="$formStatus()"
+    [regularFormState]="form.status"
+  />
 </div>
 
 <h2>New change events</h2>
 <div style="display: flex; gap: 1rem">
-  <section id="value-event">
-    <p><code>events.source.value</code></p>
-    <pre>{{ $formValueEvent() | json }}</pre>
-  </section>
-  <section id="status-event">
-    <p><code>events.source.status</code></p>
-    <pre>{{ $formStatusEvent() | json }}</pre>
-  </section>
-  <section id="touched">
-    <p><code>events.source.touched</code></p>
-    <pre>{{ $formTouched() | json }}</pre>
-  </section>
+  <app-form-state
+    codeDescription="events.source.getRawValue()"
+    [reactiveFormState]="$formValueEvent()"
+    [regularFormState]="form.value"
+  />
 
-  <section id="pristine">
-    <p><code>events.source.pristine</code></p>
-    <pre>{{ $formPristine() | json }}</pre>
-  </section>
+  <app-form-state
+    codeDescription="events.source.status"
+    [reactiveFormState]="$formStatusEvent()"
+    [regularFormState]="form.status"
+  />
+
+  <app-form-state
+    codeDescription="events.source.touched"
+    [reactiveFormState]="$formTouched()"
+    [regularFormState]="form.touched"
+  />
+
+  <app-form-state
+    codeDescription="events.source.pristine"
+    [reactiveFormState]="$formPristine()"
+    [regularFormState]="form.pristine"
+  />
+</div>
+
+<div>
+  <h2>Notes</h2>
+  <p>First in the array: the old <code>.valueChanges()</code></p>
+  <p>
+    Second in the array: the mapping of the value from the new
+    <code>events.source.getRawValue()</code>
+  </p>
+  <p>(also logged to console)</p>
+  <pre>{{ valuesChanging$ | async | json }}</pre>
 </div>

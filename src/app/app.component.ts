@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {
@@ -9,12 +9,18 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Observable, map } from 'rxjs';
+import { Observable, combineLatest, map, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { FormStateComponent } from './form-state/form-state.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ReactiveFormsModule,
+    FormStateComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -74,4 +80,14 @@ export class AppComponent {
   $formStatusEvent = toSignal(this.formStatusEvent(this.form), {
     initialValue: this.form.status,
   });
+
+  //   Note #1 - the shape of the old and new value are different - the events value one is flattened
+  valuesChanging$ = combineLatest([
+    this.form.valueChanges,
+    this.form.events.pipe(map((event) => event.source.getRawValue())),
+  ]).pipe(
+    tap(([valChanges, eventsVal]) =>
+      console.log('valChanges', valChanges, 'eventsVals', eventsVal)
+    )
+  );
 }
