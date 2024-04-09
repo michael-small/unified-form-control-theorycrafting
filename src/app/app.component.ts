@@ -18,10 +18,13 @@ import { Observable, combineLatest, filter, map, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormStateComponent } from './form-state/form-state.component';
 import {
+  $allEvents,
+  $allEventsValues,
   $prisineEvents,
   $statusEvents,
   $touchedEvents,
   $valueEvents,
+  allEventsValues$,
   pristineEvents$,
   statusEvents$,
   touchedEvents$,
@@ -74,16 +77,25 @@ export class AppComponent {
   touchedEvents$ = touchedEvents$(this.form);
   $touchedEvents = $touchedEvents(this.form);
 
+  $allEvents = $allEvents(this.form);
+
+  allEventsValues$ = allEventsValues$(this.form);
+  $allEventsValues = $allEventsValues(this.form);
+
   $allEventEffects = effect(() => {
     const value = this.$valueEvents();
     const status = this.$statusEvents();
     const pristine = this.$pristineEvents();
     const touched = this.$touchedEvents();
+    const allEvents = this.$allEvents();
+    const allEventsValues = this.$allEventsValues();
 
-    console.log(value);
-    console.log(status);
-    console.log(pristine);
-    console.log(touched);
+    // console.log(value);
+    // console.log(status);
+    // console.log(pristine);
+    // console.log(touched);
+    // console.log(allEvents);
+    // console.log(allEventsValues);
     console.log('----------------------');
   });
 }

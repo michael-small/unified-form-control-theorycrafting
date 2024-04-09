@@ -36,3 +36,10 @@
     <input [formControl]="form.controls.age" name="age" type="number" />
   </form>
 </section>
+
+<p>
+  TODO - get initial values tomorrow, I am likely just botching some RXJS
+  operator
+</p>
+<pre>{{ allEventsValues$ | async | json }}</pre>
+<pre>{{ $allEventsValues() | json }}</pre>
