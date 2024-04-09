@@ -17,6 +17,16 @@ import {
 import { Observable, combineLatest, filter, map, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormStateComponent } from './form-state/form-state.component';
+import {
+  $prisineEvents,
+  $statusEvents,
+  $touchedEvents,
+  $valueEvents,
+  pristineEvents$,
+  statusEvents$,
+  touchedEvents$,
+  valueEvents$,
+} from './form-event-utils';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -52,169 +62,22 @@ export class AppComponent {
     }),
   });
 
-  formValues<T>(form: AbstractControl<T>): Observable<T> {
-    return form.valueChanges.pipe(map(() => form.getRawValue()));
-  }
-  $formValues = toSignal(this.formValues(this.form), {
-    initialValue: this.form.getRawValue(),
-  });
+  valueEvents$ = valueEvents$(this.form);
+  $valueEvents = $valueEvents(this.form);
 
-  formStatus<T>(form: AbstractControl<T>): Observable<FormControlStatus> {
-    return form.statusChanges.pipe(map(() => form.status));
-  }
-  $formStatus = toSignal(this.formStatus(this.form), {
-    initialValue: this.form.status,
-  });
+  statusEvents$ = statusEvents$(this.form);
+  $statusEvents = $statusEvents(this.form);
 
-  formTouched<T>(form: AbstractControl<T>): Observable<boolean> {
-    return form.events.pipe(map((events) => events.source.touched));
-  }
-  $formTouched = toSignal(this.formTouched(this.form), {
-    initialValue: this.form.touched,
-  });
+  pristineEvents$ = pristineEvents$(this.form);
+  $pristineEvents = $prisineEvents(this.form);
 
-  formPristine<T>(form: AbstractControl<T>): Observable<boolean> {
-    return form.events.pipe(map((events) => events.source.pristine));
-  }
-  $formPristine = toSignal(this.formPristine(this.form), {
-    initialValue: this.form.pristine,
-  });
-
-  formValueEvent<T>(form: AbstractControl<T>): Observable<T> {
-    return form.events.pipe(map((events) => events.source.getRawValue()));
-  }
-  $formValueEvent = toSignal(this.formValueEvent(this.form), {
-    initialValue: this.form.getRawValue(),
-  });
-
-  formStatusEvent<T>(form: AbstractControl<T>): Observable<FormControlStatus> {
-    return form.events.pipe(map((events) => events.source.status));
-  }
-  $formStatusEvent = toSignal(this.formStatusEvent(this.form), {
-    initialValue: this.form.status,
-  });
-
-  // Note #1 - edit - no, it's not flattened, it is the last contained control's event
-  valuesChanging$ = combineLatest([
-    this.form.valueChanges,
-    this.form.events.pipe(map((event) => event.source.getRawValue())),
-  ]).pipe(
-    tap(([valChanges, eventsVal]) => {
-      //   console.log('valueChanges', valChanges, 'eventsValue', eventsVal);
-    })
-  );
-
-  formEvent<T>(form: AbstractControl<T>): Observable<ControlEvent<T>> {
-    return form.events;
-  }
-  $formEvent = toSignal(this.formEvent(this.form));
-  formEvent$ = this.formEvent(this.form).pipe(
-    tap((event) => {
-      //   console.log(event);
-    })
-  );
-
-  formValueEventOfParentIdk<T>(form: AbstractControl<T>) {
-    return form.events.pipe(
-      filter(
-        (event): event is ValueChangeEvent<T> =>
-          event instanceof ValueChangeEvent
-      ),
-      //   tap((event) => console.log(event.value)),
-      map((event) => event.value)
-    );
-  }
-  formValueEventOfParentIdk$ = this.formValueEventOfParentIdk(this.form);
-
-  //   formEventComposite<T>(form: AbstractControl<T>) {
-  //     const value = form.events.pipe(map((event) => event.source.getRawValue()));
-  //   }
-
-  eventsAndEventsSource$ = combineLatest([
-    this.form.events,
-    this.form.events.pipe(map((event) => event.source)),
-  ]).pipe(
-    tap(([events, eventsSources]) => {
-      //   console.log(events);
-      //   console.log(eventsSources);
-      //   console.log('----------------');
-    })
-  );
-
-  mappingEventsFromSource$ = this.form.events.pipe(
-    map((events) => {
-      return {
-        value: events.source.value,
-        status: events.source.status,
-        touched: events.source.touched,
-        prisine: events.source.pristine,
-      };
-    })
-    // tap((val) => console.log(val))
-  );
-
-  // mappingEvents$ = this.form.events.pipe(
-  //   map((events) => {
-  //     return {
-  //       value: events.value
-  //       status: events.source.status,
-  //       touched: events.source.touched,
-  //       prisine: events.source.pristine,
-  //     };
-  //   }),
-  //   tap((val) => console.log(val))
-  // );
-
-  valueEvents$ = this.form.events.pipe(
-    filter(
-      (
-        event: ControlEvent
-      ): event is ValueChangeEvent<typeof this.form.value> =>
-        event instanceof ValueChangeEvent
-    )
-  );
-  $valueEvents = toSignal(this.valueEvents$);
-  $eventsEffect = effect(() => {
-    const events = this.$valueEvents();
-  });
-
-  statusEvents$ = this.form.events.pipe(
-    filter(
-      (event: ControlEvent): event is StatusEvent =>
-        event instanceof StatusEvent
-    )
-  );
-  $statusEvents = toSignal(this.statusEvents$);
-  $statusEffect = effect(() => {
-    const events = this.$statusEvents();
-  });
-
-  touchedEvents$ = this.form.events.pipe(
-    filter(
-      (event: ControlEvent): event is TouchedEvent =>
-        event instanceof TouchedEvent
-    )
-  );
-  $touchedEvents = toSignal(this.touchedEvents$);
-  $touchedEffect = effect(() => {
-    const events = this.$touchedEvents();
-  });
-
-  pristineEvents$ = this.form.events.pipe(
-    filter(
-      (event: ControlEvent): event is PristineEvent =>
-        event instanceof PristineEvent
-    )
-  );
-  $prisineEvents = toSignal(this.pristineEvents$);
-  $pristineEffect = effect(() => {
-    const events = this.$prisineEvents();
-  });
+  touchedEvents$ = touchedEvents$(this.form);
+  $touchedEvents = $touchedEvents(this.form);
 
   $allEventEffects = effect(() => {
     const value = this.$valueEvents();
     const status = this.$statusEvents();
-    const pristine = this.$prisineEvents();
+    const pristine = this.$pristineEvents();
     const touched = this.$touchedEvents();
 
     console.log(value);
