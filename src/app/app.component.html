@@ -37,10 +37,11 @@
   </form>
 </section>
 
-<p>
-  TODO - get initial values tomorrow, I am likely just botching some RXJS
-  operator
-</p>
-<pre>{{ allEventsUnified$ | async | json }}</pre>
-<pre>{{ $allEventsUnified() | json }}</pre>
-<pre>{{ $swagVal() }}</pre>
+<section>
+  <h2>Unified</h2>
+  <code>allEventsUnified$ | async | json</code>
+  <pre>{{ allEventsUnified$ | async | json }}</pre>
+
+  <code>$allEventsUnified() | json</code>
+  <pre>{{ $allEventsUnified() | json }}</pre>
+</section>

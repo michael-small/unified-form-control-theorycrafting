@@ -92,6 +92,9 @@ export function allEventsValues$<T>(form: AbstractControl<T>) {
     })
   );
 }
+export function $allEventsValues<T>(form: AbstractControl<T>) {
+  return toSignal(allEventsValues$(form));
+}
 
 function isValueEvent<T>(
   event: ControlEvent | T
@@ -152,9 +155,12 @@ export function allEventsUnified$<T>(form: AbstractControl<T>) {
   );
 }
 export function $allEventsUnified<T>(form: AbstractControl<T>) {
-  return toSignal(allEventsUnified$(form));
-}
-
-export function $allEventsValues<T>(form: AbstractControl<T>) {
-  return toSignal(allEventsValues$(form));
+  return toSignal(allEventsUnified$(form), {
+    initialValue: {
+      value: form.value,
+      status: form.status,
+      pristine: form.pristine,
+      touched: form.touched,
+    },
+  });
 }

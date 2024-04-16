@@ -16,7 +16,6 @@ import {
 } from '@angular/forms';
 import { Observable, combineLatest, filter, map, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormStateComponent } from './form-state/form-state.component';
 import {
   $allEvents,
   $allEventsUnified,
@@ -35,18 +34,11 @@ import {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    ReactiveFormsModule,
-    FormStateComponent,
-  ],
+  imports: [CommonModule, RouterOutlet, ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'unified-form-control-theorycrafting';
-
   initialValues = {
     name: '',
     age: 0,
@@ -67,40 +59,20 @@ export class AppComponent {
     }),
   });
 
-  valueEvents$ = valueEvents$(this.form);
+  valueEvents$ = valueEvents$(this.form).pipe(tap(console.log));
   $valueEvents = $valueEvents(this.form);
 
-  statusEvents$ = statusEvents$(this.form);
+  statusEvents$ = statusEvents$(this.form).pipe(tap(console.log));
   $statusEvents = $statusEvents(this.form);
 
-  pristineEvents$ = pristineEvents$(this.form);
+  pristineEvents$ = pristineEvents$(this.form).pipe(tap(console.log));
   $pristineEvents = $prisineEvents(this.form);
 
-  touchedEvents$ = touchedEvents$(this.form);
+  touchedEvents$ = touchedEvents$(this.form).pipe(tap(console.log));
   $touchedEvents = $touchedEvents(this.form);
 
   $allEvents = $allEvents(this.form);
 
   allEventsUnified$ = allEventsUnified$(this.form);
   $allEventsUnified = $allEventsUnified(this.form);
-
-  $allEventEffects = effect(() => {
-    const value = this.$valueEvents();
-    const status = this.$statusEvents();
-    const pristine = this.$pristineEvents();
-    const touched = this.$touchedEvents();
-    const allEvents = this.$allEvents();
-
-    // console.log(value);
-    // console.log(status);
-    // console.log(pristine);
-    // console.log(touched);
-    // console.log(allEvents);
-    // console.log(allEventsValues);
-    console.log('----------------------');
-  });
-
-  $swagVal = computed(
-    () => this.$allEventsUnified()?.value.innerForm?.innerName
-  );
 }
