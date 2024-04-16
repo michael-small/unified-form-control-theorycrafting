@@ -2,6 +2,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   ControlEvent,
+  FormControlStatus,
   PristineEvent,
   StatusEvent,
   TouchedEvent,
@@ -41,6 +42,7 @@ export function touchedEvents$<T>(form: AbstractControl<T>) {
     )
   );
 }
+
 export function $touchedEvents<T>(form: AbstractControl<T>) {
   return toSignal(touchedEvents$(form));
 }
@@ -89,6 +91,68 @@ export function allEventsValues$<T>(form: AbstractControl<T>) {
       };
     })
   );
+}
+
+function isValueEvent<T>(
+  event: ControlEvent | T
+): event is ValueChangeEvent<T> {
+  return event instanceof ValueChangeEvent;
+}
+function isStatusEvent<T>(event: ControlEvent | T): event is StatusEvent {
+  return event instanceof StatusEvent;
+}
+function isPristineEvent<T>(event: ControlEvent | T): event is PristineEvent {
+  return event instanceof PristineEvent;
+}
+function isTouchedEvent<T>(event: ControlEvent | T): event is TouchedEvent {
+  return event instanceof TouchedEvent;
+}
+export function allEventsUnified$<T>(form: AbstractControl<T>) {
+  return combineLatest([
+    valueEvents$(form).pipe(startWith(form.value)),
+    statusEvents$(form).pipe(startWith(form.status)),
+    touchedEvents$(form).pipe(startWith(form.touched)),
+    pristineEvents$(form).pipe(startWith(form.pristine)),
+  ]).pipe(
+    map(([value, status, touched, pristine]) => {
+      let val: T | ValueChangeEvent<T>;
+      if (isValueEvent(value)) {
+        val = value.value;
+      } else {
+        val = value;
+      }
+
+      let stat: FormControlStatus | StatusEvent;
+      if (isStatusEvent(status)) {
+        stat = status.status;
+      } else {
+        stat = status;
+      }
+
+      let touch: boolean | TouchedEvent;
+      if (isTouchedEvent(touched)) {
+        touch = touched.touched;
+      } else {
+        touch = touched;
+      }
+
+      let prist: boolean | PristineEvent;
+      if (isPristineEvent(pristine)) {
+        prist = pristine.pristine;
+      } else {
+        prist = pristine;
+      }
+      return {
+        value: val,
+        status: stat,
+        touched: touch,
+        pristine: prist,
+      };
+    })
+  );
+}
+export function $allEventsUnified<T>(form: AbstractControl<T>) {
+  return toSignal(allEventsUnified$(form));
 }
 
 export function $allEventsValues<T>(form: AbstractControl<T>) {

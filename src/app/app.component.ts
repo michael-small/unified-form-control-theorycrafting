@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {
@@ -19,11 +19,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormStateComponent } from './form-state/form-state.component';
 import {
   $allEvents,
+  $allEventsUnified,
   $allEventsValues,
   $prisineEvents,
   $statusEvents,
   $touchedEvents,
   $valueEvents,
+  allEventsUnified$,
   allEventsValues$,
   pristineEvents$,
   statusEvents$,
@@ -79,8 +81,8 @@ export class AppComponent {
 
   $allEvents = $allEvents(this.form);
 
-  allEventsValues$ = allEventsValues$(this.form);
-  $allEventsValues = $allEventsValues(this.form);
+  allEventsUnified$ = allEventsUnified$(this.form);
+  $allEventsUnified = $allEventsUnified(this.form);
 
   $allEventEffects = effect(() => {
     const value = this.$valueEvents();
@@ -88,7 +90,6 @@ export class AppComponent {
     const pristine = this.$pristineEvents();
     const touched = this.$touchedEvents();
     const allEvents = this.$allEvents();
-    const allEventsValues = this.$allEventsValues();
 
     // console.log(value);
     // console.log(status);
@@ -98,4 +99,8 @@ export class AppComponent {
     // console.log(allEventsValues);
     console.log('----------------------');
   });
+
+  $swagVal = computed(
+    () => this.$allEventsUnified()?.value.innerForm?.innerName
+  );
 }
