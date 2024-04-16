@@ -1,6 +1,6 @@
-<section id="about">
-  <h1>Unified Form Control Theorycrafting</h1>
+<h1>Unified Form Control Theorycrafting</h1>
 
+<section id="about">
   <h2>
     <a href="https://github.com/angular/angular/pull/54579" target="_blank"
       >feat(forms): Unified Control State Change Events</a
@@ -38,10 +38,19 @@
 </section>
 
 <section>
-  <h2>Unified</h2>
+  <h2>Unified object as observable and as a signal</h2>
   <code>allEventsUnified$ | async | json</code>
   <pre>{{ allEventsUnified$ | async | json }}</pre>
 
   <code>$allEventsUnified() | json</code>
   <pre>{{ $allEventsUnified() | json }}</pre>
+</section>
+
+<section>
+  <h2>Smaller event utilities</h2>
+  <p>
+    Check the subscriptions in the <code>ngOnInit()</code> and the effects in
+    the <code>constructor()</code> for the loggin of observables and signals
+    respectively
+  </p>
 </section>

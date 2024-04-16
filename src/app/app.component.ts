@@ -75,4 +75,18 @@ export class AppComponent {
 
   allEventsUnified$ = allEventsUnified$(this.form);
   $allEventsUnified = $allEventsUnified(this.form);
+
+  constructor() {
+    effect(() => console.log(this.$valueEvents()));
+    effect(() => console.log(this.$statusEvents()));
+    effect(() => console.log(this.$touchedEvents()));
+    effect(() => console.log(this.$pristineEvents()));
+  }
+
+  ngOnInit() {
+    this.valueEvents$.subscribe();
+    this.statusEvents$.subscribe();
+    this.touchedEvents$.subscribe();
+    this.pristineEvents$.subscribe();
+  }
 }
