@@ -36,6 +36,10 @@ import {
       <pre>Status: {{ store.status() | json }}</pre>
       <pre>Pristine: {{ store.pristine() | json }}</pre>
       <pre>Touched: {{ store.touched() | json }}</pre>
+      <pre>computed - canDrinkInUSA: {{ store.canDrinkInUSA() }}</pre>
+      <pre>computed - canNavigateAway: {{ store.canNavigateAway() }}</pre>
+      <pre>value: metadata.valueSinceSave {{ store.metadata() | json }}</pre>
+      <button (click)="saveForm()">Save</button>
     </div>
   `,
   styles: ``,
@@ -54,6 +58,11 @@ export class SignalStoreExampleComponent {
       innerName: new FormControl(''),
     }),
   });
+
+  saveForm() {
+    console.log(this.form.getRawValue());
+    this.store.saveForm(this.form.getRawValue());
+  }
 
   ngOnInit() {
     this.store.watchForm(this.form);
