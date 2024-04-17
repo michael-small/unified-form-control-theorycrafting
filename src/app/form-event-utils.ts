@@ -118,6 +118,7 @@ export function allEventsUnified$<T>(form: AbstractControl<T>) {
     pristineEvents$(form).pipe(startWith(form.pristine)),
   ]).pipe(
     map(([value, status, touched, pristine]) => {
+      console.log('hit');
       let val: T | ValueChangeEvent<T>;
       if (isValueEvent(value)) {
         val = value.value;

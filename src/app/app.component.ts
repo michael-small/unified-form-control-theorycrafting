@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {
@@ -31,14 +31,21 @@ import {
   touchedEvents$,
   valueEvents$,
 } from './form-event-utils';
+import { SignalStoreExampleComponent } from './signal-store-example/signal-store-example.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ReactiveFormsModule,
+    SignalStoreExampleComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  $showSignalStore = signal(true);
   initialValues = {
     name: '',
     age: 0,

@@ -37,6 +37,13 @@
   </form>
 </section>
 
+<button (click)="$showSignalStore.set(!$showSignalStore())">
+  Toggle signal store
+</button>
+@if ($showSignalStore()) {
+<app-signal-store-example />
+}
+
 <section>
   <h2>Unified object as observable and as a signal</h2>
   <code>allEventsUnified$ | async | json</code>
