@@ -37,26 +37,5 @@
   </form>
 </section>
 
-<section>
-  <h2>Unified object as observable and as a signal</h2>
-  <code>allEventsUnified$ | async | json</code>
-  <pre>{{ allEventsUnified$ | async | json }}</pre>
-
-  <code>$allEventsUnified() | json</code>
-  <pre>{{ $allEventsUnified() | json }}</pre>
-</section>
-
-<section>
-  <h2>Smaller event utilities</h2>
-  <p>
-    Check the subscriptions in the <code>ngOnInit()</code> and the effects in
-    the <code>constructor()</code> for the loggin of observables and signals
-    respectively.
-  </p>
-  <p>
-    Note - Stackblitz may complain about the logging to the console being too
-    large. I am not sure if this is just a Stackblitz limitation or if there is
-    something unoptimal with this approach. Obligatory "it works on my device"
-    when run locally.
-  </p>
-</section>
+<!-- <app-changes /> -->
+<app-nesting />
