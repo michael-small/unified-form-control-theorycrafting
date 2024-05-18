@@ -140,6 +140,16 @@ function isTouchedEvent<T>(
 ): event is TouchedChangeEvent {
   return event instanceof TouchedChangeEvent;
 }
+
+function isSubmittedEvent<T>(
+  event: ControlEvent | T
+): event is FormSubmittedEvent {
+  return event instanceof FormSubmittedEvent;
+}
+function isResetEvent<T>(event: ControlEvent | T): event is FormResetEvent {
+  return event instanceof FormResetEvent;
+}
+
 export function allEventsUnified$<T>(form: AbstractControl<T>) {
   return combineLatest([
     valueEvents$(form).pipe(startWith(form.value)),
