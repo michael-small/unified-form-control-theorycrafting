@@ -7,6 +7,8 @@ import {
   StatusChangeEvent,
   TouchedChangeEvent,
   ValueChangeEvent,
+  FormResetEvent,
+  FormSubmittedEvent,
 } from '@angular/forms';
 import { combineLatest, filter, map, merge, startWith } from 'rxjs';
 
@@ -57,6 +59,30 @@ export function pristineEvents$<T>(form: AbstractControl<T>) {
 }
 export function $prisineEvents<T>(form: AbstractControl<T>) {
   return toSignal(pristineEvents$(form));
+}
+
+export function resetEvents$<T>(form: AbstractControl<T>) {
+  return form.events.pipe(
+    filter(
+      (event: ControlEvent): event is FormResetEvent =>
+        event instanceof FormResetEvent
+    )
+  );
+}
+export function $resetEvents<T>(form: AbstractControl<T>) {
+  return toSignal(resetEvents$(form));
+}
+
+export function submitEvents$<T>(form: AbstractControl<T>) {
+  return form.events.pipe(
+    filter(
+      (event: ControlEvent): event is FormSubmittedEvent =>
+        event instanceof FormSubmittedEvent
+    )
+  );
+}
+export function $submitEvents<T>(form: AbstractControl<T>) {
+  return toSignal(submitEvents$(form));
 }
 
 export function allEvents$<T>(form: AbstractControl<T>) {
