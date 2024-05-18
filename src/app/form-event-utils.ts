@@ -3,9 +3,9 @@ import {
   AbstractControl,
   ControlEvent,
   FormControlStatus,
-  PristineEvent,
-  StatusEvent,
-  TouchedEvent,
+  PristineChangeEvent,
+  StatusChangeEvent,
+  TouchedChangeEvent,
   ValueChangeEvent,
 } from '@angular/forms';
 import { combineLatest, filter, map, merge, startWith } from 'rxjs';
@@ -25,8 +25,8 @@ export function $valueEvents<T>(form: AbstractControl<T>) {
 export function statusEvents$<T>(form: AbstractControl<T>) {
   return form.events.pipe(
     filter(
-      (event: ControlEvent): event is StatusEvent =>
-        event instanceof StatusEvent
+      (event: ControlEvent): event is StatusChangeEvent =>
+        event instanceof StatusChangeEvent
     )
   );
 }
@@ -37,8 +37,8 @@ export function $statusEvents<T>(form: AbstractControl<T>) {
 export function touchedEvents$<T>(form: AbstractControl<T>) {
   return form.events.pipe(
     filter(
-      (event: ControlEvent): event is TouchedEvent =>
-        event instanceof TouchedEvent
+      (event: ControlEvent): event is TouchedChangeEvent =>
+        event instanceof TouchedChangeEvent
     )
   );
 }
@@ -50,8 +50,8 @@ export function $touchedEvents<T>(form: AbstractControl<T>) {
 export function pristineEvents$<T>(form: AbstractControl<T>) {
   return form.events.pipe(
     filter(
-      (event: ControlEvent): event is PristineEvent =>
-        event instanceof PristineEvent
+      (event: ControlEvent): event is PristineChangeEvent =>
+        event instanceof PristineChangeEvent
     )
   );
 }
@@ -101,14 +101,18 @@ function isValueEvent<T>(
 ): event is ValueChangeEvent<T> {
   return event instanceof ValueChangeEvent;
 }
-function isStatusEvent<T>(event: ControlEvent | T): event is StatusEvent {
-  return event instanceof StatusEvent;
+function isStatusEvent<T>(event: ControlEvent | T): event is StatusChangeEvent {
+  return event instanceof StatusChangeEvent;
 }
-function isPristineEvent<T>(event: ControlEvent | T): event is PristineEvent {
-  return event instanceof PristineEvent;
+function isPristineEvent<T>(
+  event: ControlEvent | T
+): event is PristineChangeEvent {
+  return event instanceof PristineChangeEvent;
 }
-function isTouchedEvent<T>(event: ControlEvent | T): event is TouchedEvent {
-  return event instanceof TouchedEvent;
+function isTouchedEvent<T>(
+  event: ControlEvent | T
+): event is TouchedChangeEvent {
+  return event instanceof TouchedChangeEvent;
 }
 export function allEventsUnified$<T>(form: AbstractControl<T>) {
   return combineLatest([
@@ -125,21 +129,21 @@ export function allEventsUnified$<T>(form: AbstractControl<T>) {
         val = value;
       }
 
-      let stat: FormControlStatus | StatusEvent;
+      let stat: FormControlStatus | StatusChangeEvent;
       if (isStatusEvent(status)) {
         stat = status.status;
       } else {
         stat = status;
       }
 
-      let touch: boolean | TouchedEvent;
+      let touch: boolean | TouchedChangeEvent;
       if (isTouchedEvent(touched)) {
         touch = touched.touched;
       } else {
         touch = touched;
       }
 
-      let prist: boolean | PristineEvent;
+      let prist: boolean | PristineChangeEvent;
       if (isPristineEvent(pristine)) {
         prist = pristine.pristine;
       } else {

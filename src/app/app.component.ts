@@ -7,10 +7,7 @@ import {
   FormControlStatus,
   FormGroup,
   NonNullableFormBuilder,
-  PristineEvent,
   ReactiveFormsModule,
-  StatusEvent,
-  TouchedEvent,
   Validators,
   ValueChangeEvent,
 } from '@angular/forms';
