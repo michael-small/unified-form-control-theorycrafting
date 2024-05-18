@@ -14,15 +14,12 @@ import {
 import { Observable, combineLatest, filter, map, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  $allEvents,
   $allEventsUnified,
-  $allEventsValues,
   $prisineEvents,
   $statusEvents,
   $touchedEvents,
   $valueEvents,
   allEventsUnified$,
-  allEventsValues$,
   pristineEvents$,
   statusEvents$,
   touchedEvents$,
@@ -67,8 +64,6 @@ export class AppComponent {
 
   touchedEvents$ = touchedEvents$(this.form).pipe(tap(console.log));
   $touchedEvents = $touchedEvents(this.form);
-
-  $allEvents = $allEvents(this.form);
 
   allEventsUnified$ = allEventsUnified$(this.form);
   $allEventsUnified = $allEventsUnified(this.form);
